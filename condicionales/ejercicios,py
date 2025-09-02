@@ -1,0 +1,55 @@
+def solicitar_dato(mensaje, validacion):
+    while True:
+        valor = input(mensaje)
+        if validacion(valor):
+            return valor
+        else:
+            print("❌ Entrada inválida. Por favor, intenta de nuevo.")
+
+def crear_permiso():
+    print("📋 Ingreso de datos para solicitud de permiso de trabajo:\n")
+    
+    empleado = solicitar_dato("Nombre del empleado: ", lambda x: x.isalpha ())
+    edad = solicitar_dato("Edad: ", lambda x: x.isdigit() and 18 <= int(x) <= 65)
+    sexo = solicitar_dato("Sexo (M/F): ", lambda x: x.upper() in ['M', 'F'])
+    estado_salud = solicitar_dato("Estado de salud (bueno/regular/malo): ", lambda x: x.lower() in ['bueno', 'regular', 'malo'])
+    epps = solicitar_dato("¿Cuenta con los EPPs necesarios? (sí/no): ", lambda x: x.lower() in ['sí', 'no'])
+    clima = solicitar_dato("¿Condiciones climáticas favorables? (sí/no): ", lambda x: x.lower() in ['sí', 'no'])
+    
+    fecha_inicio = solicitar_dato("Fecha inicio (YYYY-MM-DD): ", lambda x: len(x) == 10 and "-" in x)
+    fecha_fin = solicitar_dato("Fecha fin (YYYY-MM-DD): ", lambda x: len(x) == 10 and "-" in x)
+    motivo = solicitar_dato("Motivo del permiso: ", lambda x: len(x) > 2)
+    supervisor = solicitar_dato("Nombre del supervisor: ", lambda x: x.isalpha())
+     
+    if estado_salud.lower() == "bueno" and epps.lower() == "sí" and clima.lower() == "sí":
+        estado_permiso = "aprobado"
+    else:
+        estado_permiso = "pendiente"
+
+    return {
+        "empleado": empleado,
+        "edad": edad,
+        "sexo": sexo.upper(),
+        "estado_salud": estado_salud.lower(),
+        "epps": epps.lower(),
+        "clima": clima.lower(),
+        "fecha_inicio": fecha_inicio,
+        "fecha_fin": fecha_fin,
+        "motivo": motivo,
+        "supervisor": supervisor,
+        "estado": "pendiente"
+    }
+
+def mostrar_permiso(permiso):
+    return f"""
+📝 Permiso solicitado por: {permiso['empleado']}
+Edad: {permiso['edad']} | Sexo: {permiso['sexo']} | Salud: {permiso['estado_salud']}
+EPPs completos: {permiso['epps']} | Clima favorable: {permiso['clima']}
+Desde: {permiso['fecha_inicio']} hasta: {permiso['fecha_fin']}
+Motivo: {permiso['motivo']} | Supervisor: {permiso['supervisor']}
+Estado actual: {permiso['estado']}
+"""
+
+# Ejecución del programa
+permiso = crear_permiso()
+print(mostrar_permiso(permiso))
